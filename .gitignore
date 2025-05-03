@@ -18,7 +18,7 @@ Thumbs.db
 
 # Ignore editor-specific settings
 .vscode/
-.idea/
+idea/
 *.sublime-workspace
 *.sublime-project
 
