@@ -15,22 +15,16 @@ class DbConnection:
         self.cursor = self.connection.cursor()
 
     def execute_query(self, query: str, params: tuple = ()):
-        """
-        
-        """
+        """ """
         self.cursor.execute(query, params)
         return self.cursor.fetchall()
 
     def commit(self):
-        """
-        
-        """
+        """ """
         self.connection.commit()
 
     def close(self):
-        """
-        
-        """
+        """ """
         self.connection.close()
         DbConnection._instance = None
 
@@ -40,19 +34,21 @@ class DbAPI:
         self._connection = connection
 
     def insert(self, table: str, columns: tuple, values: tuple):
-        """
-        
-        """
-        placeholders = ','.join('?' for _ in values)
-        columns_str = ','.join(columns)
+        """ """
+        placeholders = ",".join("?" for _ in values)
+        columns_str = ",".join(columns)
         query = f"INSERT INTO {table} ({columns_str}) VALUES ({placeholders})"
         self._connection.execute_query(query, values)
         self._connection.commit()
 
-    def delete(self, table: str, condition_column: str = "", condition_value = None, condition: str = "="):
-        """
-        
-        """
+    def delete(
+        self,
+        table: str,
+        condition_column: str = "",
+        condition_value=None,
+        condition: str = "=",
+    ):
+        """ """
         query = f"DELETE FROM {table}"
         params = ()
         if condition_column and condition_value is not None:
@@ -60,11 +56,17 @@ class DbAPI:
             params = (condition_value,)
         self._connection.execute_query(query, params)
         self._connection.commit()
-        
-    def update(self, table: str, column: str, value, condition_column: str = "", condition_value = None, condition: str = "="):
-        """
-        
-        """
+
+    def update(
+        self,
+        table: str,
+        column: str,
+        value,
+        condition_column: str = "",
+        condition_value=None,
+        condition: str = "=",
+    ):
+        """ """
         query = f"UPDATE {table} SET {column} = ?"
         params = (value,)
         if condition_column and condition_value is not None:
@@ -72,11 +74,16 @@ class DbAPI:
             params += (condition_value,)
         self._connection.execute_query(query, params)
         self._connection.commit()
-        
-    def get(self, table: str, columns = "*", condition_column: str = "", condition_value = None, condition: str = "="):
-        """
-        
-        """
+
+    def get(
+        self,
+        table: str,
+        columns="*",
+        condition_column: str = "",
+        condition_value=None,
+        condition: str = "=",
+    ):
+        """ """
         query = f"SELECT {columns} FROM {table}"
         params = ()
         if condition_column and condition_value is not None:

@@ -2,7 +2,6 @@ CREATE TABLE Role (
     role_id INTEGER PRIMARY KEY AUTOINCREMENT,
     role_name TEXT NOT NULL UNIQUE
 );
-
 CREATE TABLE User (
     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL UNIQUE,
@@ -10,10 +9,8 @@ CREATE TABLE User (
     role_id INTEGER NOT NULL,
     full_name TEXT NOT NULL,
     employee_id INTEGER,
-    FOREIGN KEY (role_id) REFERENCES Role(role_id)
-    FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
+    FOREIGN KEY (role_id) REFERENCES Role(role_id) FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
 );
-
 CREATE TABLE Tasks (
     task_id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
@@ -24,7 +21,6 @@ CREATE TABLE Tasks (
     status TEXT,
     FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
 );
-
 CREATE TABLE Employees (
     employee_id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,

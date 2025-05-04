@@ -1,0 +1,57 @@
+QWidget{
+    background-color:rgb(72, 94, 97);
+    font-family: Arial;
+}
+#header_label{
+    font-size: 24px;
+    color: rgb(250, 161, 45);
+    font-weight: bold;
+    margin-bottom:15px;
+}
+#user_label,
+#pass_label{
+    font-size: 15px;
+}
+#user_input,
+#pass_input{
+    height: 30px;
+    font-size: 15px;
+    border-radius: 5px;
+    border: 1px solid rgb(248, 198, 133);
+    background-color: rgb(205, 211, 155);
+}
+#user_input{
+    margin-bottom: 10px;
+}
+#pass_input{
+    margin-bottom: 20px;
+}
+#eye_btn{
+    height: 24px;
+    width: 20px;
+    border-radius: 5px;
+    margin-bottom: 19px;
+    padding: 2px;
+    border: 1px solid rgb(248, 198, 133);
+    background-color: rgb(205, 211, 155);
+}
+#login_btn,
+#register_btn {
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid rgb(250, 161, 45);
+    background-color: rgb(205, 211, 155);
+    font-size: 15px;
+}
+#login_btn:hover,
+#register_btn:hover,
+#eye_btn:hover {
+    background-color: rgb(250, 161, 45);
+}
+#user_input:hover,
+#pass_input:hover,
+#user_input:focus,
+#pass_input:focus {
+    border: 1px solid rgb(250, 161, 45);
+}
+
