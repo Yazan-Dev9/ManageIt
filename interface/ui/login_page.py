@@ -10,13 +10,14 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
 )
+from controllers.auth_controller import AuthController
 
 
 class LoginPage(QWidget):
     WIDTH = 350
-    HIGHER = 270
+    HIGHER = 300
     TITLE = "Login Page"
-    CSS_FILE = "login.css"
+    CSS_FILE = "./interface/ui/login.css"
 
     def __init__(self):
         super().__init__()
@@ -35,6 +36,7 @@ class LoginPage(QWidget):
         self.userName()
         self.password()
         self.btnEye()
+        self.error()
         self.btnLogin()
         self.btnRegister()
         self.passwordLayout()
@@ -96,6 +98,15 @@ class LoginPage(QWidget):
         self.eye_btn.setContentsMargins(0, -25, 0, 0)
         self.eye_btn.clicked.connect(self.toggle_password)
 
+    def error(self):
+        id = "massage_label"
+
+        self.massage_label = QLabel()
+        self.massage_label.setText("Alert Error Massage")
+        self.massage_label.hide()
+        self.massage_label.setObjectName(id)
+        self.massage_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
     def btnLogin(self):
         id = "login_btn"
         text = "Login"
@@ -137,6 +148,7 @@ class LoginPage(QWidget):
         main_layout = QVBoxLayout()
         main_layout.addWidget(self.header_label)
         main_layout.addLayout(self.form_layout)
+        main_layout.addWidget(self.massage_label)
         main_layout.addLayout(self.btn_layout)
 
         self.setLayout(main_layout)
@@ -144,7 +156,15 @@ class LoginPage(QWidget):
     def login_action(self):
         username = self.user_input.text()
         password = self.pass_input.text()
-        print(f"Login attempt: {username} / {password}")
+        if AuthController.checkUser(username, password):
+            self.massage_label.setText("Login Done")
+            self.massage_label.show()
+            print("Find user Login Done")
+        else:
+            self.massage_label.setText("Filed to Login")
+            self.massage_label.setStyleSheet("color: red;")
+            self.massage_label.show()
+            print("Filed user Error")
 
     def register_action(self):
         print("Go to registration page.")
@@ -158,7 +178,7 @@ class LoginPage(QWidget):
             self.eye_btn.setText("👁️")
 
 
-if __name__ == "__main__":
+def start():
     app = QApplication(sys.argv)
     login = LoginPage()
     login.show()

@@ -91,3 +91,7 @@ class DbAPI:
             params = (condition_value,)
         result = self._connection.execute_query(query, params)
         return result
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self._connection.close()
+        print("SQLite connection closed.")

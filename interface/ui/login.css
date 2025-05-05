@@ -24,16 +24,21 @@ QWidget{
     margin-bottom: 10px;
 }
 #pass_input{
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 #eye_btn{
-    height: 24px;
+    height: 22px;
     width: 20px;
     border-radius: 5px;
-    margin-bottom: 19px;
+    margin-bottom: 29px;
     padding: 2px;
     border: 1px solid rgb(248, 198, 133);
     background-color: rgb(205, 211, 155);
+}
+#massage_label{
+    font-size: 15px;
+    font-weight: 400;
+    color: springgreen;
 }
 #login_btn,
 #register_btn {
