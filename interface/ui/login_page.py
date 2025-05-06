@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import (
     QHBoxLayout,
 )
 from controllers.auth_controller import AuthController
+from interface.ui.main_window import MainWindow
 
 
 class LoginPage(QWidget):
@@ -159,6 +160,10 @@ class LoginPage(QWidget):
         if AuthController.checkUser(username, password):
             self.massage_label.setText("Login Done")
             self.massage_label.show()
+            self.main_window = MainWindow()
+            self.main_window.show()
+            self.close()
+
             print("Find user Login Done")
         else:
             self.massage_label.setText("Filed to Login")
