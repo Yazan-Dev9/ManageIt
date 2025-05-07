@@ -1,28 +1,53 @@
 import bcrypt
-from database.db import DbConnection, DbAPI
+from database.dbconnection import DbConnection
+from database.dbapi import DbAPI
+from models.user import User
 
 
 class AuthController:
     """ """
 
+    ID = 0
+    USERNAME = 1
+    PASSWORD = 2
+    FULL_NAME = 3
+    ROLE_ID = 4
+    EMPLOYEE_ID = 5
+
     def __init__(self):
-        self.username = ""
-        self.password = ""
+        self._user: User = User()
+        self._rows = []
 
     @staticmethod
     def checkUser(username: str, password: str):
         """ """
-        hash_password = __class__()._getPasswordFromDb(username)
+        hash_password = __class__()._getHashPassword(username)
 
         return bcrypt.checkpw(password.encode("utf-8"), hash_password)
 
-    def _getPasswordFromDb(self, username):
+    def _getHashPassword(self, username):
+        """ """
+        self.fetchUser(username)
+        stored_hashed_password = self._user.getPassword
+
+        return stored_hashed_password
+
+    def fetchUser(self, username: str):
         """ """
         conn = DbConnection("./database/manageit.db")
-        api = DbAPI(conn)
-        pass_db = api.get("Users", "password", "username", username)
-        stored_hashed_password = pass_db.pop()[0]
-        return stored_hashed_password
+        self.api = DbAPI(conn)
+        self._rows = self.api.get("Users", "*", "username", username)
+        self._user.setId(self._rows[0][self.ID])
+        self._user.setUserName(self._rows[0][self.USERNAME])
+        self._user.setPassword(self._rows[0][self.PASSWORD])
+        self._user.setFullName(self._rows[0][self.FULL_NAME])
+        self._user.setRole(self._rows[0][self.ROLE_ID])
+
+        return self._user
+
+    @property
+    def getUser(self):
+        return self._user
 
     @staticmethod
     def hashedPassword(password: str):

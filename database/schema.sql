@@ -6,8 +6,8 @@ CREATE TABLE Users (
     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
-    role_id INTEGER NOT NULL,
     full_name TEXT NOT NULL,
+    role_id INTEGER NOT NULL,
     employee_id INTEGER,
     FOREIGN KEY (role_id) REFERENCES Role(role_id) FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
 );
@@ -17,7 +17,7 @@ CREATE TABLE Tasks (
     description TEXT,
     employee_id INTEGER NOT NULL,
     start_date DATE,
-    due_date DATE,
+    end_date DATE,
     status TEXT,
     FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
 );

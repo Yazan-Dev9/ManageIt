@@ -1,5 +1,6 @@
 from controllers.auth_controller import AuthController
-from database.db import DbConnection, DbAPI
+from database.dbconnection import DbConnection
+from database.dbapi import DbAPI
 import getpass
 
 
@@ -42,7 +43,7 @@ def addRole():
     api.insert("Role", ("role_name",), (role_name,))
 
 
-def app():
+def start():
     while True:
         print("1. login")
         print("2. register")
@@ -63,4 +64,4 @@ def app():
 
 
 if __name__ == "__main__":
-    app()
+    start()

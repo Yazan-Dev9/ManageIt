@@ -1,4 +1,5 @@
 import sys
+from typing import Optional
 from PyQt5.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -11,11 +12,13 @@ from PyQt5.QtWidgets import (
 from interface.ui.employees_window import EmployeesWindow
 from interface.ui.reports_window import ReportsWindow
 from interface.ui.tasks_window import TasksWindow
+from models.user import User
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, user: Optional[User] = None):
         super().__init__()
+        self.user: Optional[User] = user
         self.setWindowTitle("Management Employees And Tasks Software")
         self.resize(800, 600)
         self.initUi()
@@ -36,7 +39,7 @@ class MainWindow(QMainWindow):
 
     def mainPages(self):
         self.pages = QStackedWidget()
-        self.home_widget = QLabel("Welcome In System")
+        self.home_widget = QLabel(f"Welcome In System : {self.user.getFullName}")
         self.pages.addWidget(self.home_widget)
         self.employees_widget = EmployeesWindow()
         self.pages.addWidget(self.employees_widget)

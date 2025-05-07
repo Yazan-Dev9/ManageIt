@@ -1,5 +1,19 @@
 # ManageIt Changelog
 
+## [0.6.0] - 2025-5-7
+
+### Added
+
+- Added models (user,role,employee,task)
+
+### Changed
+
+- Edit in auth control fetch from Database
+
+- Edit in main window to get object user
+
+---
+
 ## [0.5.0] - 2025-5-6
 
 ### Added

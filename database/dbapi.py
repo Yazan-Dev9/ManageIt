@@ -1,32 +1,4 @@
-import sqlite3
-
-
-class DbConnection:
-    _instance = None
-
-    def __new__(cls, db_file: str):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-            cls._instance._initialize(db_file)
-        return cls._instance
-
-    def _initialize(self, db_file: str):
-        self.connection = sqlite3.connect(db_file)
-        self.cursor = self.connection.cursor()
-
-    def execute_query(self, query: str, params: tuple = ()):
-        """ """
-        self.cursor.execute(query, params)
-        return self.cursor.fetchall()
-
-    def commit(self):
-        """ """
-        self.connection.commit()
-
-    def close(self):
-        """ """
-        self.connection.close()
-        DbConnection._instance = None
+from database.dbconnection import DbConnection
 
 
 class DbAPI:
@@ -38,7 +10,7 @@ class DbAPI:
         placeholders = ",".join("?" for _ in values)
         columns_str = ",".join(columns)
         query = f"INSERT INTO {table} ({columns_str}) VALUES ({placeholders})"
-        self._connection.execute_query(query, values)
+        self._connection.executeQuery(query, values)
         self._connection.commit()
 
     def delete(
@@ -54,7 +26,7 @@ class DbAPI:
         if condition_column and condition_value is not None:
             query += f" WHERE {condition_column} {condition} ?"
             params = (condition_value,)
-        self._connection.execute_query(query, params)
+        self._connection.executeQuery(query, params)
         self._connection.commit()
 
     def update(
@@ -72,7 +44,7 @@ class DbAPI:
         if condition_column and condition_value is not None:
             query += f" WHERE {condition_column} {condition} ?"
             params += (condition_value,)
-        self._connection.execute_query(query, params)
+        self._connection.executeQuery(query, params)
         self._connection.commit()
 
     def get(
@@ -89,7 +61,7 @@ class DbAPI:
         if condition_column and condition_value is not None:
             query += f" WHERE {condition_column} {condition} ?"
             params = (condition_value,)
-        result = self._connection.execute_query(query, params)
+        result = self._connection.executeQuery(query, params)
         return result
 
     def __exit__(self, exc_type, exc_value, traceback):
