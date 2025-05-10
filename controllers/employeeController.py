@@ -1,32 +1,8 @@
-from database.dbconnection import DbConnection
-from database.dbapi import DbAPI
+from controllers.controller import IController
 from models.employee import Employee
 
 
-class Controller:
-
-    USER_ID = 0
-    USER_USERNAME = 1
-    USER_PASSWORD = 2
-    USER_FULL_NAME = 3
-    USER_ROLE_ID = 4
-    USER_EMPLOYEE_ID = 5
-    EMPLOYEE_ID = 0
-    EMPLOYEE_NAME = 1
-    EMPLOYEE_EMAIL = 2
-    EMPLOYEE_PHONE = 3
-    EMPLOYEE_POSITION = 4
-
-    def __init__(self):
-        conn = DbConnection("./database/manageit.db")
-        self.api = DbAPI(conn)
-
-    @property
-    def getAPI(self):
-        return self.api
-
-
-class EmployeeController(Controller):
+class EmployeeController(IController):
     """ """
 
     def __init__(self):
@@ -34,7 +10,7 @@ class EmployeeController(Controller):
         self._employee: Employee = Employee()
         self._rows = []
 
-    def fetchEmployees(self) -> list[Employee]:
+    def fetchList(self) -> list[Employee]:
         """ """
         self._rows = self.getAPI.get("Employees", "*")
         employees = []
@@ -49,7 +25,19 @@ class EmployeeController(Controller):
             employees.append(employee)
         return employees
 
-    def saveEmployee(self, name, email, phone, position):
+    def fetch(self, employee_id: int):
+        """ """
+        self._rows = self.getAPI.get("Employees", "*", "employee_id", employee_id)
+        self._employee.setId(self._rows[0][self.EMPLOYEE_ID])
+        self._employee.setName(self._rows[0][self.EMPLOYEE_NAME])
+        self._employee.setEmail(self._rows[0][self.EMPLOYEE_EMAIL])
+        self._employee.setPhone(self._rows[0][self.EMPLOYEE_PHONE])
+        self._employee.setPosition(self._rows[0][self.EMPLOYEE_POSITION])
+
+        return self._employee
+
+    def save(self, name, email, phone, position):
+        """ """
         return self.getAPI.insert(
             "Employees",
             (
@@ -64,4 +52,26 @@ class EmployeeController(Controller):
                 phone,
                 position,
             ),
+        )
+
+    def remove(self, employee_id: int):
+        return self.getAPI.delete("Employees", "employee_id", employee_id)
+
+    def edit(self, employee_id: int, name, email, phone, position):
+        return self.getAPI.update(
+            "Employees",
+            (
+                "name",
+                "email",
+                "phone",
+                "position",
+            ),
+            (
+                name,
+                email,
+                phone,
+                position,
+            ),
+            "employee_id",
+            employee_id,
         )

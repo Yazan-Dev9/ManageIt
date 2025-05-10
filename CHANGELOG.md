@@ -1,78 +1,86 @@
 # ManageIt Changelog
 
-## [0.7.0] - 2025-5-10
+## [0.8.0] - 2025-05-11
 
-### Added
+### Added in 0.8.0
 
-- Added dialog to add employee
-
-### Changed
-
-- Added table to show employee
-
----
-
-## [0.6.0] - 2025-5-7
-
-### Added
-
-- Added models (user,role,employee,task)
-
-### Changed
-
-- Edit in auth control fetch from Database
-
-- Edit in main window to get object user
+- Dialog to add tasks
+- Table to display tasks
+- Feature to edit and delete employees
+- Feature to edit and delete tasks
 
 ---
 
-## [0.5.0] - 2025-5-6
+## [0.7.0] - 2025-05-10
 
-### Added
+### Added in 0.7.0
 
-- Added home page
-- Added employees page
-- Added tasks page
-- Added reports page
+- Dialog to add employees
 
----
+### Changed in 0.7.0
 
-## [0.4.0] - 2025-5-5
-
-### Added
-
-- Added CLI manager
-
-### Changed
-
-- hashed password in Database
-
-- Added massage label to login page
+- Added table to display employees
 
 ---
 
-## [0.3.0] - 2025-5-4
+## [0.6.0] - 2025-05-07
 
-### Added
+### Added in 0.6.0
 
-- Added login page
+- Models for user, role, employee, and task
 
----
+### Changed in 0.6.0
 
-## [0.2.0] - 2025-5-3
-
-### Added
-
-- Added Database API
+- Authorization control now fetches from the database
+- Main window updated to get user objects
 
 ---
 
-## [0.1.0] - 2025-5-2
+## [0.5.0] - 2025-05-06
 
-### Added  
+### Added in 0.5.0
 
-- Initialized project
+- Home page
+- Employees page
+- Tasks page
+- Reports page
 
-- Added Database schema
+---
+
+## [0.4.0] - 2025-05-05
+
+### Added in 0.4.0
+
+- CLI manager
+
+### Changed in 0.4.0
+
+- Passwords are now hashed in the database
+- Added message label to the login page
+
+---
+
+## [0.3.0] - 2025-05-04
+
+### Added in 0.3.0
+
+- Login page
+
+---
+
+## [0.2.0] - 2025-05-03
+
+### Added in 0.2.0
+
+- Database API
+
+---
+
+## [0.1.0] - 2025-05-02
+
+### Added in 0.1.0
+
+- Project initialization
+- Database schema
 
 ---

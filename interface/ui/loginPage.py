@@ -20,7 +20,7 @@ class LoginPage(QWidget):
     WIDTH = 350
     HIGHER = 300
     TITLE = "Login Page"
-    CSS_FILE = "./interface/ui/login.css"
+    CSS_FILE = "./assets/style/login.css"
 
     def __init__(self):
         super().__init__()

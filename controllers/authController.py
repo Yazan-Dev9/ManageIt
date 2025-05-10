@@ -1,20 +1,13 @@
 import bcrypt
-from database.dbconnection import DbConnection
-from database.dbapi import DbAPI
 from models.user import User
+from controllers.controller import IController
 
 
-class AuthController:
+class AuthController(IController):
     """ """
 
-    ID = 0
-    USERNAME = 1
-    PASSWORD = 2
-    FULL_NAME = 3
-    ROLE_ID = 4
-    EMPLOYEE_ID = 5
-
     def __init__(self):
+        super().__init__()
         self._user: User = User()
         self._rows = []
 
@@ -26,23 +19,49 @@ class AuthController:
 
     def _getHashPassword(self, username):
         """ """
-        self.fetchUser(username)
-        stored_hashed_password = self._user.getPassword
+        self.fetch(username)
+        stored_hashed_password = self.getUser.getPassword
 
         return stored_hashed_password
 
-    def fetchUser(self, username: str):
+    def fetch(self, username: str):
         """ """
-        conn = DbConnection("./database/manageit.db")
-        self.api = DbAPI(conn)
-        self._rows = self.api.get("Users", "*", "username", username)
-        self._user.setId(self._rows[0][self.ID])
-        self._user.setUserName(self._rows[0][self.USERNAME])
-        self._user.setPassword(self._rows[0][self.PASSWORD])
-        self._user.setFullName(self._rows[0][self.FULL_NAME])
-        self._user.setRole(self._rows[0][self.ROLE_ID])
+        self._rows = self.getAPI.get("Users", "*", "username", username)
+        self._user.setId(self._rows[0][self.USER_ID])
+        self._user.setUserName(self._rows[0][self.USER_USERNAME])
+        self._user.setPassword(self._rows[0][self.USER_PASSWORD])
+        self._user.setFullName(self._rows[0][self.USER_FULL_NAME])
+        self._user.setRole(self._rows[0][self.USER_ROLE_ID])
 
         return self._user
+
+    def save(self, username: str, password: str, fullname: str, role: int):
+        """ """
+        hashed_password = self.hashedPassword(password)
+        return self.getAPI.insert(
+            "Users",
+            (
+                "username",
+                "password",
+                "full_name",
+                "role_id",
+            ),
+            (
+                username,
+                hashed_password,
+                fullname,
+                role,
+            ),
+        )
+
+    def fetchList(self, *arges, **kwargs) -> list:
+        return super().fetchList(*arges, **kwargs)
+
+    def remove(self, *arges, **kwargs):
+        return super().remove(*arges, **kwargs)
+
+    def edit(self, *arges, **kwargs):
+        return super().remove(*arges, **kwargs)
 
     @property
     def getUser(self):

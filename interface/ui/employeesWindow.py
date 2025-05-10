@@ -1,16 +1,17 @@
 from PyQt5.QtWidgets import (
     QWidget,
     QVBoxLayout,
-    # QListWidget,
     QLabel,
     QHBoxLayout,
     QPushButton,
     QTableWidget,
     QTableWidgetItem,
+    QMessageBox,
+    QHeaderView
 )
 
 from controllers.employeeController import EmployeeController
-from interface.ui.addEmployeeWidget import AddEmployeeWidget
+from interface.ui.inputEmployeeWidget import InputEmployeeWidget
 
 
 class EmployeesWindow(QWidget):
@@ -33,9 +34,11 @@ class EmployeesWindow(QWidget):
 
     def editBtn(self):
         self.edit_btn = QPushButton("Edit")
+        self.edit_btn.clicked.connect(self.editEmployee)
 
     def deleteBtn(self):
         self.delete_btn = QPushButton("Delete")
+        self.delete_btn.clicked.connect(self.deleteEmployee)
 
     def btnLayout(self):
         self.btn_layout = QHBoxLayout()
@@ -49,25 +52,36 @@ class EmployeesWindow(QWidget):
         self.table.setHorizontalHeaderLabels(
             ["ID", "Name", "Email", "Phone", "Position"]
         )
+        header = self.table.horizontalHeader()
+        header.setSectionResizeMode(QHeaderView.ResizeToContents)
         self.table.verticalHeader().setVisible(False)
-        self.table.setEditTriggers(QTableWidget.NoEditTriggers)
+
+        self.table.setSelectionBehavior(self.table.SelectRows)
+        self.table.setSelectionMode(self.table.SingleSelection)
+        self.table.setEditTriggers(self.table.NoEditTriggers)
         self.row_position = self.table.rowCount()
         self.employees = EmployeeController()
-        self.putTable()
+        self.putItems()
 
     def putItems(self):
-        self.table.reset()
+        self.table.setRowCount(0)
         self.table.setDisabled(False)
-        employees_list = self.employees.fetchEmployees()
+        employees_list = self.employees.fetchList()
         if employees_list:
             for employee in employees_list:
                 self.table.insertRow(self.row_position)
                 self.table.setItem(
                     self.row_position, 0, QTableWidgetItem(str(employee.getId))
                 )
-                self.table.setItem(self.row_position, 1, QTableWidgetItem(employee.getName))
-                self.table.setItem(self.row_position, 2, QTableWidgetItem(employee.getEmail))
-                self.table.setItem(self.row_position, 3, QTableWidgetItem(employee.getPhone))
+                self.table.setItem(
+                    self.row_position, 1, QTableWidgetItem(employee.getName)
+                )
+                self.table.setItem(
+                    self.row_position, 2, QTableWidgetItem(employee.getEmail)
+                )
+                self.table.setItem(
+                    self.row_position, 3, QTableWidgetItem(employee.getPhone)
+                )
                 self.table.setItem(
                     self.row_position, 4, QTableWidgetItem(employee.getPosition)
                 )
@@ -75,9 +89,33 @@ class EmployeesWindow(QWidget):
             self.table.setDisabled(True)
 
     def addEmployee(self):
-        window = AddEmployeeWidget()
+        window = InputEmployeeWidget()
         window.exec_()
         self.putItems()
+
+    def deleteEmployee(self):
+        row = self.table.currentRow()
+        if row >= 0:
+            msg = QMessageBox.question(
+                self,
+                "Delete",
+                "Are you sure you want to delete this employee?",
+                QMessageBox.Yes | QMessageBox.No,
+            )
+
+            if msg == QMessageBox.Yes:
+                item = self.table.item(row, 0)
+                self.employees.remove(int(item.text()))
+                self.table.removeRow(row)
+            else:
+                print("Canceled")
+
+    def editEmployee(self):
+        row = self.table.currentRow()
+        if row >= 0:
+            window = InputEmployeeWidget(self.table)
+            window.exec_()
+            self.putItems()
 
     def mainLayout(self):
         layout = QVBoxLayout()

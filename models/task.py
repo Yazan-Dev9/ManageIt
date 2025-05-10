@@ -11,13 +11,13 @@ class Task:
 
     def __init__(
         self,
-        id: int = 0,
         title: str = "Unknown",
         description: str = "Unknown",
         employee: Optional[Employee] = None,
         start_date: Optional[date] = None,
         end_date: Optional[date] = None,
-        status: str = "Unknown"
+        status: str = "Unknown",
+        id: int = 0
     ):
         self._id: int = id
         self._title: str = title
