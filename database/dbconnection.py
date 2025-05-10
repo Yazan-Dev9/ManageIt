@@ -19,6 +19,9 @@ class DbConnection:
         self.cursor.execute(query, params)
         return self.cursor.fetchall()
 
+    def isSave(self):
+        return True if self.cursor.rowcount == 1 else False
+
     def commit(self):
         """ """
         self.connection.commit()

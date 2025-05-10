@@ -10,9 +10,10 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
 )
+from controllers.authController import AuthController
+from interface.ui.mainWindow import MainWindow
 
-from controllers.auth_controller import AuthController
-from interface.ui.main_window import MainWindow
+# import pudb
 
 
 class LoginPage(QWidget):
@@ -163,8 +164,7 @@ class LoginPage(QWidget):
         if auth.checkUser(username, password):
             self.massage_label.setText("Login Done")
             self.massage_label.show()
-            # TODO fix this because i think it fetch from db tow times
-            self.main_window = MainWindow(auth.fetchUser(username))
+            self.main_window = MainWindow(auth.getUser)
             self.main_window.show()
             self.close()
 

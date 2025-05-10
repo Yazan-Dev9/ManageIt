@@ -1,5 +1,17 @@
 # ManageIt Changelog
 
+## [0.7.0] - 2025-5-10
+
+### Added
+
+- Added dialog to add employee
+
+### Changed
+
+- Added table to show employee
+
+---
+
 ## [0.6.0] - 2025-5-7
 
 ### Added

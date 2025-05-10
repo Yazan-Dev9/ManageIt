@@ -13,6 +13,13 @@ class DbAPI:
         self._connection.executeQuery(query, values)
         self._connection.commit()
 
+        if self._connection.isSave():
+            print("Insert successful")
+            return True
+        else:
+            print("Insert failed")
+            return False
+
     def delete(
         self,
         table: str,

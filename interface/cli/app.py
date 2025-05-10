@@ -1,4 +1,4 @@
-from controllers.auth_controller import AuthController
+from controllers.authController import AuthController
 from database.dbconnection import DbConnection
 from database.dbapi import DbAPI
 import getpass
@@ -11,8 +11,8 @@ api = DbAPI(connection)
 def login():
     username = input("Enter UserName: -> ")
     password = getpass.getpass("Enter Password: -> ")
-
-    if AuthController.checkUser(username, password):
+    auth = AuthController()
+    if auth.checkUser(username, password):
         print("Login Done")
     else:
         print("Error Login")

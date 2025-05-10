@@ -18,12 +18,11 @@ class AuthController:
         self._user: User = User()
         self._rows = []
 
-    @staticmethod
-    def checkUser(username: str, password: str):
+    def checkUser(self, username: str, password: str):
         """ """
-        hash_password = __class__()._getHashPassword(username)
+        hash_password = self._getHashPassword(username)
 
-        return bcrypt.checkpw(password.encode("utf-8"), hash_password)
+        return bcrypt.checkpw(password.encode("utf-8"), hash_password)  # type: ignore
 
     def _getHashPassword(self, username):
         """ """

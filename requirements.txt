@@ -1,2 +1,4 @@
+pudb==2025.1
 PyQt5==5.15.11
 PyQt5_sip==12.11.1
+python_bcrypt==0.3.2

@@ -7,11 +7,11 @@ class Employee:
 
     def __init__(
         self,
-        id: int = 0,
         name: str = "Unknown",
         email: str = "Unknown",
         phone: str = "Unknown",
-        position: str = "Unknown"
+        position: str = "Unknown",
+        id: int = 0
     ):
         self._id: int = id
         self._name: str = name
