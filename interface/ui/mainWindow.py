@@ -1,5 +1,6 @@
 import sys
 from typing import Optional
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -18,6 +19,7 @@ from models.user import User
 class MainWindow(QMainWindow):
     def __init__(self, user: Optional[User] = None):
         super().__init__()
+        self.setWindowIcon(QIcon("./assets/icon/logo.png"))
         self.setWindowTitle("Management Employees And Tasks Software")
         self.resize(800, 600)
         self.user: Optional[User] = user

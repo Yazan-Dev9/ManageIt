@@ -1,3 +1,5 @@
+from typing import Optional
+from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QDate
 from PyQt5.QtWidgets import (
     QLabel,
@@ -9,6 +11,7 @@ from PyQt5.QtWidgets import (
     QDialog,
     QDateEdit,
     QComboBox,
+    QTableWidget,
 )
 
 
@@ -17,8 +20,9 @@ from controllers.employeeController import EmployeeController
 
 
 class InputTaskWidget(QDialog):
-    def __init__(self, table=None):
+    def __init__(self, table: Optional[QTableWidget] = None):
         super().__init__()
+        self.setWindowIcon(QIcon("./assets/icon/logo.png"))
         self.table = table
         if self.table is None:
             self.setWindowTitle("Add Employee")
@@ -73,7 +77,12 @@ class InputTaskWidget(QDialog):
         self.end_date_input.setDisplayFormat("yyyy-MM-dd")
 
     def statusInput(self):
-        self.status_input = QLineEdit()
+        self.status_input = QComboBox()
+        self.status_input.addItem("Select Status")
+        status_list = ("Completed", "Progress")
+
+        for status in status_list:
+            self.status_input.addItem(status)
 
     def titleLabel(self):
         self.title_label = QLabel("title:")
@@ -95,15 +104,15 @@ class InputTaskWidget(QDialog):
 
     def put(self):
         if self.table is not None:
-            self.title_input.setText(self.table.item(0, 1).text())
-            self.description_input.setText(self.table.item(0, 2).text())
-            self.employee_input.setCurrentText(self.table.item(0, 3).text())
-            start_str = self.table.item(0, 4).text()
+            row = self.table.currentRow()
+            self.title_input.setText(self.table.item(row, 1).text())
+            self.description_input.setText(self.table.item(row, 2).text())
+            self.employee_input.setCurrentText(self.table.item(row, 3).text())
+            start_str = self.table.item(row, 4).text()
             self.start_date_input.setDate(QDate.fromString(start_str, "yyyy-MM-dd"))
-            end_str = self.table.item(0, 5).text()
+            end_str = self.table.item(row, 5).text()
             self.end_date_input.setDate(QDate.fromString(end_str, "yyyy-MM-dd"))
-            # TODO make status as QComboBox
-            self.status_input.setText(self.table.item(0, 6).text())
+            self.status_input.setCurrentText(self.table.item(row, 6).text())
 
     def addBtn(self):
         self.add_button = QPushButton("Save")
@@ -146,7 +155,8 @@ class InputTaskWidget(QDialog):
         main_layout.addLayout(self.employee_layout)
         main_layout.addLayout(self.start_date_layout)
         main_layout.addLayout(self.end_date_layout)
-        main_layout.addLayout(self.status_layout)
+        if self.table is not None:
+            main_layout.addLayout(self.status_layout)
         main_layout.addWidget(self.add_button)
 
         self.setLayout(main_layout)
@@ -157,7 +167,7 @@ class InputTaskWidget(QDialog):
         employee_id = self.employee_input.currentData()
         start_date = self.start_date_input.text()
         end_date = self.end_date_input.text()
-        status = self.status_input.text()
+        status = self.status_input.currentText()
 
         if (
             not title
@@ -177,7 +187,7 @@ class InputTaskWidget(QDialog):
                     employee_id,
                     start_date,
                     end_date,
-                    status,
+                    self.status_input.itemText(1),
                 ):
                     QMessageBox.information(
                         self, "Added Done", "Task Added Successfully"
@@ -187,7 +197,7 @@ class InputTaskWidget(QDialog):
 
             else:
                 if TaskController().edit(
-                    self.table.item(self.table.currentRow(), 0).text(),
+                    int(self.table.item(self.table.currentRow(), 0).text()),
                     title,
                     description,
                     employee_id,

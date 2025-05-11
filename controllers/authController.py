@@ -1,4 +1,5 @@
 import bcrypt
+from models.role import Role
 from models.user import User
 from controllers.controller import IController
 
@@ -9,33 +10,61 @@ class AuthController(IController):
     def __init__(self):
         super().__init__()
         self._user: User = User()
+        self._role: Role = Role()
         self._rows = []
 
-    def checkUser(self, username: str, password: str):
-        """ """
-        hash_password = self._getHashPassword(username)
+    def checkUser(self, username: str, password: str) -> bool:
+        """
+        Check if username exists and password matches.
+        """
+        user = self.fetch(username)
+        if not user:
+            return False
 
-        return bcrypt.checkpw(password.encode("utf-8"), hash_password)  # type: ignore
+        stored_hashed_password = user.getPassword
 
-    def _getHashPassword(self, username):
-        """ """
-        self.fetch(username)
-        stored_hashed_password = self.getUser.getPassword
+        if isinstance(stored_hashed_password, str):
+            stored_hashed_password = stored_hashed_password.encode("utf-8")
 
-        return stored_hashed_password
+        return bcrypt.checkpw(password.encode("utf-8"), stored_hashed_password)
 
     def fetch(self, username: str):
         """ """
         self._rows = self.getAPI.get("Users", "*", "username", username)
+
+        if not self._rows:
+            return None
+
         self._user.setId(self._rows[0][self.USER_ID])
         self._user.setUserName(self._rows[0][self.USER_USERNAME])
         self._user.setPassword(self._rows[0][self.USER_PASSWORD])
         self._user.setFullName(self._rows[0][self.USER_FULL_NAME])
-        self._user.setRole(self._rows[0][self.USER_ROLE_ID])
+        self._user.setRole(self._getRoleById(self._rows[0][self.USER_ROLE_ID]))  # type: ignore
 
         return self._user
 
-    def save(self, username: str, password: str, fullname: str, role: int):
+    def fetchRole(self, name: str):
+        """ """
+        self._rows = self.getAPI.get("Role", "*", "role_name", name)
+        if not self._rows:
+            return None
+
+        self._role.setId(self._rows[0][self.ROLE_ID])
+        self._role.setName(self._rows[0][self.ROLE_NAME])
+
+        return self._role
+
+    def _getRoleById(self, id: int):
+        self._rows = self.getAPI.get("Role", "*", "role_id", id)
+        if not self._rows:
+            return None
+
+        self._role.setId(id)
+        self._role.setName(self._rows[0][self.ROLE_NAME])
+
+        return self._role
+
+    def save(self, username: str, password: str, full_name: str, role_id: int):
         """ """
         hashed_password = self.hashedPassword(password)
         return self.getAPI.insert(
@@ -49,8 +78,8 @@ class AuthController(IController):
             (
                 username,
                 hashed_password,
-                fullname,
-                role,
+                full_name,
+                role_id,
             ),
         )
 
@@ -66,6 +95,10 @@ class AuthController(IController):
     @property
     def getUser(self):
         return self._user
+
+    @property
+    def getRole(self):
+        return self._role
 
     @staticmethod
     def hashedPassword(password: str):

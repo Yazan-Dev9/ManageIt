@@ -1,5 +1,14 @@
 # ManageIt Changelog
 
+## [0.9.0] - 2025-05-12
+
+### Added in 0.9.0
+
+- New feature to show Reports completed and progress
+- Register page
+
+---
+
 ## [0.8.0] - 2025-05-11
 
 ### Added in 0.8.0

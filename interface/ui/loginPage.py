@@ -1,5 +1,6 @@
 import sys
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (
     QApplication,
     QWidget,
@@ -11,9 +12,8 @@ from PyQt5.QtWidgets import (
     QHBoxLayout,
 )
 from controllers.authController import AuthController
+from interface.ui.registerPage import RegisterPage
 from interface.ui.mainWindow import MainWindow
-
-# import pudb
 
 
 class LoginPage(QWidget):
@@ -26,6 +26,7 @@ class LoginPage(QWidget):
         super().__init__()
         self.setWindowTitle(LoginPage.TITLE)
         self.setFixedSize(LoginPage.WIDTH, LoginPage.HIGHER)
+        self.setWindowIcon(QIcon("./assets/icon/logo.png"))
         try:
             with open(LoginPage.CSS_FILE, "r") as file:
                 self.setStyleSheet(file.read())
@@ -94,12 +95,12 @@ class LoginPage(QWidget):
 
         self.eye_btn = QToolButton()
         self.eye_btn.setObjectName(id)
-        self.eye_btn.setText("👁️")
+        self.eye_btn.setIcon(QIcon("./assets/icon/close_eye.svg"))
         self.eye_btn.setCheckable(True)
         self.eye_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         self.eye_btn.setToolTip("Show/Hide password")
         self.eye_btn.setContentsMargins(0, -25, 0, 0)
-        self.eye_btn.clicked.connect(self.toggle_password)
+        self.eye_btn.clicked.connect(self.togglePassword)
 
     def error(self):
         id = "massage_label"
@@ -118,7 +119,7 @@ class LoginPage(QWidget):
         self.login_btn.setObjectName(id)
         self.login_btn.setText(text)
         self.login_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.login_btn.clicked.connect(self.login_action)
+        self.login_btn.clicked.connect(self.loginAction)
 
     def btnRegister(self):
         id = "register_btn"
@@ -128,7 +129,7 @@ class LoginPage(QWidget):
         self.register_btn.setObjectName(id)
         self.register_btn.setText(text)
         self.register_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.register_btn.clicked.connect(self.register_action)
+        self.register_btn.clicked.connect(self.registerAction)
 
     def passwordLayout(self):
         self.pass_layout = QHBoxLayout()
@@ -156,35 +157,43 @@ class LoginPage(QWidget):
 
         self.setLayout(main_layout)
 
-    def login_action(self):
+    def loginAction(self):
         username = self.user_input.text()
         password = self.pass_input.text()
         auth = AuthController()
 
-        if auth.checkUser(username, password):
-            self.massage_label.setText("Login Done")
+        if not username:
+            self.massage_label.setText("Enter UserName")
+            self.massage_label.setStyleSheet("color: red;")
             self.massage_label.show()
+        elif not password:
+            self.massage_label.setText("Enter Password")
+            self.massage_label.setStyleSheet("color: red;")
+            self.massage_label.show()
+        elif auth.checkUser(username, password):
             self.main_window = MainWindow(auth.getUser)
             self.main_window.show()
             self.close()
 
             print("Find user Login Done")
         else:
-            self.massage_label.setText("Filed to Login")
+            self.massage_label.setText("Filed to Login\ncheck username or password")
             self.massage_label.setStyleSheet("color: red;")
             self.massage_label.show()
             print("Filed user Error")
 
-    def register_action(self):
-        print("Go to registration page.")
+    def registerAction(self):
+        self.register_window = RegisterPage()
+        self.register_window.show()
+        self.close()
 
-    def toggle_password(self):
+    def togglePassword(self):
         if self.eye_btn.isChecked():
             self.pass_input.setEchoMode(QLineEdit.Normal)
-            self.eye_btn.setText("🙈")
+            self.eye_btn.setIcon(QIcon("./assets/icon/eye.svg"))
         else:
             self.pass_input.setEchoMode(QLineEdit.Password)
-            self.eye_btn.setText("👁️")
+            self.eye_btn.setIcon(QIcon("./assets/icon/close_eye.svg"))
 
 
 def start():

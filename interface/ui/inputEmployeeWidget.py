@@ -1,3 +1,5 @@
+from typing import Optional
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (
     QLabel,
     QLineEdit,
@@ -6,14 +8,15 @@ from PyQt5.QtWidgets import (
     QHBoxLayout,
     QMessageBox,
     QDialog,
+    QTableWidget,
 )
-
 from controllers.employeeController import EmployeeController
 
 
 class InputEmployeeWidget(QDialog):
-    def __init__(self, table=None):
+    def __init__(self, table: Optional[QTableWidget] = None):
         super().__init__()
+        self.setWindowIcon(QIcon("./assets/icon/logo.png"))
         self.table = table
         if self.table is None:
             self.setWindowTitle("Add Employee")
@@ -99,10 +102,11 @@ class InputEmployeeWidget(QDialog):
 
     def put(self):
         if self.table is not None:
-            self.name_input.setText(self.table.item(0, 1).text())
-            self.phone_input.setText(self.table.item(0, 2).text())
-            self.email_input.setText(self.table.item(0, 3).text())
-            self.position_input.setText(self.table.item(0, 4).text())
+            row = self.table.currentRow()
+            self.name_input.setText(self.table.item(row, 1).text())
+            self.phone_input.setText(self.table.item(row, 2).text())
+            self.email_input.setText(self.table.item(row, 3).text())
+            self.position_input.setText(self.table.item(row, 4).text())
 
     def add_person(self):
         name = self.name_input.text()
@@ -124,7 +128,7 @@ class InputEmployeeWidget(QDialog):
 
             else:
                 if EmployeeController().edit(
-                    self.table.item(self.table.currentRow(), 0).text(),
+                    int(self.table.item(self.table.currentRow(), 0).text()),
                     name,
                     phone,
                     email,

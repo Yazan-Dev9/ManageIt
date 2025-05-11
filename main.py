@@ -3,8 +3,8 @@ from interface.ui.loginPage import start as gui
 
 
 def main():
-    gui()
     # cli()
+    gui()
 
 
 main()
